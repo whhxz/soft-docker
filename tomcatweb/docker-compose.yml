@@ -1,0 +1,17 @@
+version: '2'
+# 启动的服务
+services:
+  web:
+    # 使用镜像
+    image: tomcatweb
+    #使用的端口
+    ports:
+      - "8080:8080"
+    # 挂载目录，在使用本地目录挂载到容器中时，本地目录需要使用绝对路径，相对路径可能会报错
+    volumes:
+      # 用于存放配置文件，因为在项目启动时，配置文件是外放，并不放在war包中，
+      - /xxxxx/webroot/:/home/xxx/webroot
+      # 日志文件，用于容器销毁后，日志文件还是保留在本地，因为容器中的数据会随着容器的销毁而销毁
+      - /xxxxx/logs/:/usr/local/share/tomcat9/logs
+      # 用于项目在tomcat根目录启动
+      - /xxxxx/ROOT.xml:/usr/local/share/tomcat9/conf/Catalina/localhost/ROOT.xml
