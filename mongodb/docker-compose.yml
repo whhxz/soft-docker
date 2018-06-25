@@ -1,0 +1,14 @@
+version: '2'
+services:
+  # MongoDB: https://hub.docker.com/_/mongo/
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - ./datadb:/data/db
+    ports:
+      - 27017:27017
+    network_mode: bridge
+# networks:
+#   app_net:
+#     external: true

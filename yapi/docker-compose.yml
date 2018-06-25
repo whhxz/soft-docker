@@ -1,0 +1,26 @@
+version: '2'
+services:
+  yapiinit:
+    image: yapi
+    volumes:
+      - ./config.json:/app/config.json
+      - ./log:/app/log
+    external_links:
+      - mongodb
+    network_mode: bridge
+    working_dir: /app/vendors
+    entrypoint: npm
+    command: run install-server
+  yapi:
+    image: yapi
+    volumes: 
+      - ./config.json:/app/config.json
+      - ./log:/app/log
+    ports:
+      - 6767:6767
+    external_links:
+      - mongodb
+    network_mode: bridge
+    working_dir: /app/vendors
+    entrypoint: node
+    command: server/app.js
