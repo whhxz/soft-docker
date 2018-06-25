@@ -1,0 +1,10 @@
+{
+  "port": "6767",
+  "adminAccount": "admin@admin.com",
+  "db": {
+    "servername": "mongodb",
+    "DATABASE": "yapi",
+    "port": 27017,
+    "authSource": ""
+  }
+}
