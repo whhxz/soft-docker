@@ -1,0 +1,53 @@
+version: '2'
+services:
+  fdfs_tracker:
+    image: fastdfs
+    container_name: fdfs_tracker
+    volumes:
+      - ./conf/tracker.conf:/etc/fdfs/tracker.conf
+      #- ./conf/storage.conf:/etc/fdfs/storage.conf
+      #- ./conf/client.conf:/etc/fdfs/client.conf
+      #- ./conf/http.conf:/etc/fdfs/http.conf
+      #- ./conf/mime.types:/etc/fdfs/mime.types
+      #- ./conf/mod_fastdfs.conf:/etc/fdfs/mod_fastdfs.conf
+      #- ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./data/tracker:/fastdfs/tracker
+      #- ./data/storage:/fastdfs/storage
+    ports:
+      - 22122:22122
+    command: bash -c "/etc/init.d/fdfs_trackerd start && tail -f /fastdfs/tracker/logs/trackerd.log"
+  fdfs_storage:
+    image: fastdfs
+    container_name: fdfs_storage
+    volumes:
+      #- ./conf/tracker.conf:/etc/fdfs/tracker.conf
+      - ./conf/storage.conf:/etc/fdfs/storage.conf
+      - ./conf/client.conf:/etc/fdfs/client.conf
+      - ./conf/http.conf:/etc/fdfs/http.conf
+      - ./conf/mime.types:/etc/fdfs/mime.types
+      - ./conf/mod_fastdfs.conf:/etc/fdfs/mod_fastdfs.conf
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      #- ./data/tracker:/fastdfs/tracker
+      - ./data/storage:/fastdfs/storage
+    links:
+      - fdfs_tracker
+    ports:
+      - 9898:9898
+      - 23000:23000
+    command: bash -c "/etc/init.d/fdfs_storaged start && /usr/local/nginx/sbin/./nginx &&  tail -f /fastdfs/storage/logs/storaged.log"
+    #command: "tail -f /etc/fdfs/storage.conf"
+#
+#
+#  yapi:
+#    image: yapi
+#    volumes: 
+#      - ./config.json:/app/config.json
+#      - ./log:/app/log
+#    ports:
+#      - 6767:6767
+#    external_links:
+#      - mongodb
+#    network_mode: bridge
+#    working_dir: /app/vendors
+#    entrypoint: node
+#    command: server/app.js
