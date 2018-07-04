@@ -32,22 +32,25 @@ services:
     links:
       - fdfs_tracker
     ports:
-      - 9898:9898
       - 23000:23000
+      - 9898:9898
     command: bash -c "/etc/init.d/fdfs_storaged start && /usr/local/nginx/sbin/./nginx &&  tail -f /fastdfs/storage/logs/storaged.log"
-    #command: "tail -f /etc/fdfs/storage.conf"
-#
-#
-#  yapi:
-#    image: yapi
-#    volumes: 
-#      - ./config.json:/app/config.json
-#      - ./log:/app/log
-#    ports:
-#      - 6767:6767
-#    external_links:
-#      - mongodb
-#    network_mode: bridge
-#    working_dir: /app/vendors
-#    entrypoint: node
-#    command: server/app.js
+  fdfs_storage1:
+    image: fastdfs
+    container_name: fdfs_storage1
+    volumes:
+      #- ./conf/tracker.conf:/etc/fdfs/tracker.conf
+      - ./conf/storage.conf:/etc/fdfs/storage.conf
+      - ./conf/client.conf:/etc/fdfs/client.conf
+      - ./conf/http.conf:/etc/fdfs/http.conf
+      - ./conf/mime.types:/etc/fdfs/mime.types
+      - ./conf/mod_fastdfs.conf:/etc/fdfs/mod_fastdfs.conf
+      - ./conf/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      #- ./data/tracker:/fastdfs/tracker
+      - ./data/storage1:/fastdfs/storage
+    links:
+      - fdfs_tracker
+    ports:
+      - 23001:23000
+      - 9899:9898
+    command: bash -c "/etc/init.d/fdfs_storaged start && /usr/local/nginx/sbin/./nginx && tail -f /fastdfs/storage/logs/storaged.log"
