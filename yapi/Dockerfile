@@ -1,5 +1,5 @@
 from node
-COPY ./ /app/vendors
+COPY ./yapi /app/vendors
 WORKDIR /app/vendors
 RUN npm install --production --registry https://registry.npm.taobao.org
 EXPOSE 3000
